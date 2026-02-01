@@ -1,0 +1,915 @@
+/* ==========================================================================
+   Apple Premium Design System
+   Inspired by apple.com's design philosophy:
+   - Clean typography with clear hierarchy
+   - Generous whitespace
+   - Glassmorphism (frosted glass)
+   - Subtle, layered shadows
+   - Refined color palette
+   - Smooth, purposeful animations
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TYPOGRAPHY SYSTEM
+   -------------------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Apple-inspired font stack */
+  --apple-font: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+    'SF Pro Text', 'Helvetica Neue', 'PingFang SC', 'Noto Sans CJK SC',
+    'Microsoft YaHei', sans-serif;
+
+  /* Font sizes - Apple-style scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.5rem;
+
+  /* Letter spacing */
+  --tracking-tight: -0.022em;
+  --tracking-normal: -0.01em;
+  --tracking-wide: 0.02em;
+
+  /* Line heights */
+  --leading-tight: 1.15;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+}
+
+/* Global typography override */
+body {
+  font-family: var(--apple-font) !important;
+  font-size: var(--text-base) !important;
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--apple-font) !important;
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+/* --------------------------------------------------------------------------
+   2. COLOR SYSTEM - Apple Palette
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Primary colors */
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ED;
+  --apple-blue-light: rgba(0, 113, 227, 0.08);
+
+  /* Neutral palette */
+  --apple-black: #1d1d1f;
+  --apple-gray-900: #1d1d1f;
+  --apple-gray-800: #333336;
+  --apple-gray-700: #424245;
+  --apple-gray-600: #6e6e73;
+  --apple-gray-500: #86868b;
+  --apple-gray-400: #aeaeb2;
+  --apple-gray-300: #d2d2d7;
+  --apple-gray-200: #e8e8ed;
+  --apple-gray-100: #f5f5f7;
+  --apple-white: #fbfbfd;
+
+  /* Functional colors */
+  --apple-green: #30d158;
+  --apple-orange: #ff9f0a;
+  --apple-red: #ff3b30;
+
+  /* Background and surface */
+  --surface-primary: #fbfbfd;
+  --surface-secondary: #f5f5f7;
+  --surface-tertiary: #ffffff;
+  --surface-elevated: rgba(255, 255, 255, 0.72);
+
+  /* Text hierarchy */
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-tertiary: #86868b;
+
+  /* Shadows - Apple-style layered */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 50px -12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 20px 40px -8px rgba(0, 0, 0, 0.1);
+
+  /* Glass effect */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: 20px;
+
+  /* Border radius - Apple style */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  /* Transitions - Apple timing */
+  --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 0.2s;
+  --duration-normal: 0.35s;
+  --duration-slow: 0.5s;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+}
+
+/* Override Butterfly theme variables for light mode */
+:root {
+  --global-bg: var(--surface-primary) !important;
+  --font-color: var(--text-primary) !important;
+  --card-bg: var(--surface-tertiary) !important;
+  --card-box-shadow: var(--shadow-md) !important;
+  --card-hover-box-shadow: var(--shadow-hover) !important;
+  --sidebar-bg: var(--surface-secondary) !important;
+  --btn-hover-color: var(--apple-blue) !important;
+  --btn-bg: var(--apple-blue) !important;
+  --text-bg-hover: var(--apple-blue) !important;
+  --pseudo-hover: var(--apple-blue) !important;
+  --hr-border: var(--apple-gray-200) !important;
+  --hr-before-color: var(--apple-gray-400) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. DARK MODE - True black Apple-style
+   -------------------------------------------------------------------------- */
+
+[data-theme='dark'] {
+  --surface-primary: #000000;
+  --surface-secondary: #1c1c1e;
+  --surface-tertiary: #1c1c1e;
+  --surface-elevated: rgba(28, 28, 30, 0.8);
+
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+
+  --glass-bg: rgba(28, 28, 30, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.45);
+
+  --apple-blue: #2997ff;
+  --apple-blue-hover: #2997ff;
+  --apple-blue-light: rgba(41, 151, 255, 0.12);
+
+  /* Override Butterfly dark variables */
+  --global-bg: #000000 !important;
+  --font-color: #f5f5f7 !important;
+  --card-bg: #1c1c1e !important;
+  --card-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  --card-hover-box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45) !important;
+  --sidebar-bg: #1c1c1e !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. GLASSMORPHISM NAVBAR
+   -------------------------------------------------------------------------- */
+
+#nav {
+  background: var(--glass-bg) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  border-bottom: 0.5px solid var(--glass-border);
+  transition: all var(--duration-normal) var(--ease-apple) !important;
+}
+
+#page-header.nav-fixed #nav {
+  background: var(--glass-bg) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  box-shadow: none !important;
+  border-bottom: 0.5px solid var(--glass-border);
+}
+
+#page-header:not(.is-top-bar) #nav {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+}
+
+/* Nav text styling */
+#nav a, #nav .site-name {
+  font-weight: 500 !important;
+  font-size: var(--text-sm) !important;
+  letter-spacing: 0.01em;
+  transition: opacity var(--duration-fast) var(--ease-apple) !important;
+}
+
+#nav a:hover {
+  opacity: 0.65 !important;
+}
+
+/* Site name in nav */
+#nav #blog-info .site-name {
+  font-weight: 600 !important;
+  font-size: var(--text-base) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. CARDS - Apple-style with refined shadows
+   -------------------------------------------------------------------------- */
+
+/* Card base styles */
+.layout > div:first-child:not(.recent-posts),
+#recent-posts > .recent-post-item,
+#aside-content .card-widget,
+.layout > .recent-posts .pagination > *:not(.space) {
+  border-radius: var(--radius-lg) !important;
+  background: var(--surface-tertiary) !important;
+  box-shadow: var(--shadow-md) !important;
+  transition: transform var(--duration-normal) var(--ease-apple),
+              box-shadow var(--duration-normal) var(--ease-apple) !important;
+  border: 0.5px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .layout > div:first-child:not(.recent-posts),
+[data-theme='dark'] #recent-posts > .recent-post-item,
+[data-theme='dark'] #aside-content .card-widget,
+[data-theme='dark'] .layout > .recent-posts .pagination > *:not(.space) {
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Card hover - subtle lift */
+.layout > div:first-child:not(.recent-posts):hover,
+#recent-posts > .recent-post-item:hover,
+#aside-content .card-widget:hover,
+.layout > .recent-posts .pagination > *:not(.space):hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-hover) !important;
+}
+
+/* Override card-animated for Apple feel */
+.card-animated {
+  transition: transform var(--duration-normal) var(--ease-apple),
+              box-shadow var(--duration-normal) var(--ease-apple) !important;
+}
+
+.card-animated:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-hover) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. HERO SECTION - Cinematic
+   -------------------------------------------------------------------------- */
+
+#page-header {
+  position: relative;
+}
+
+#page-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--surface-primary), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Site title - Apple-style large bold text */
+#site-title {
+  font-family: var(--apple-font) !important;
+  font-weight: 800 !important;
+  font-size: var(--text-5xl) !important;
+  letter-spacing: -0.03em !important;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3) !important;
+  line-height: 1.1 !important;
+}
+
+#site-subtitle {
+  font-weight: 400 !important;
+  font-size: var(--text-xl) !important;
+  letter-spacing: var(--tracking-normal) !important;
+  opacity: 0.85;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Scroll down indicator */
+#scroll-down {
+  position: relative;
+  z-index: 2;
+}
+
+#scroll-down i {
+  font-size: 1.5rem !important;
+  opacity: 0.6;
+  transition: opacity var(--duration-fast) var(--ease-apple);
+}
+
+/* --------------------------------------------------------------------------
+   7. CONTENT AREA - Clean, spacious
+   -------------------------------------------------------------------------- */
+
+/* Main content padding */
+.layout {
+  gap: var(--space-8) !important;
+}
+
+#content-inner {
+  padding: var(--space-4) 0 !important;
+}
+
+/* Post items - more spacing */
+#recent-posts > .recent-post-item {
+  margin-bottom: var(--space-6) !important;
+}
+
+/* Article title */
+.article-title {
+  font-weight: 700 !important;
+  font-size: var(--text-xl) !important;
+  letter-spacing: var(--tracking-tight) !important;
+  color: var(--text-primary) !important;
+  transition: color var(--duration-fast) var(--ease-apple) !important;
+}
+
+.article-title:hover {
+  color: var(--apple-blue) !important;
+}
+
+/* Article meta */
+.article-meta-wrap {
+  color: var(--text-tertiary) !important;
+  font-size: var(--text-sm) !important;
+  margin-top: var(--space-2) !important;
+}
+
+.article-meta-wrap .post-meta-date {
+  color: var(--text-tertiary) !important;
+}
+
+/* Article content preview */
+.recent-post-info .content {
+  color: var(--text-secondary) !important;
+  font-size: var(--text-sm) !important;
+  line-height: var(--leading-relaxed) !important;
+  margin-top: var(--space-3) !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. SIDEBAR - Clean design
+   -------------------------------------------------------------------------- */
+
+/* Author card */
+#aside-content .card-info {
+  text-align: center;
+}
+
+.author-info__name {
+  font-weight: 700 !important;
+  font-size: var(--text-lg) !important;
+  color: var(--text-primary) !important;
+  letter-spacing: var(--tracking-tight);
+  margin-top: var(--space-3) !important;
+}
+
+.author-info__description {
+  color: var(--text-secondary) !important;
+  font-size: var(--text-sm) !important;
+  margin-top: var(--space-1) !important;
+}
+
+/* Avatar */
+.avatar-img img {
+  border-radius: 50% !important;
+  border: 3px solid rgba(0, 0, 0, 0.06) !important;
+  transition: transform var(--duration-normal) var(--ease-spring),
+              box-shadow var(--duration-normal) var(--ease-apple) !important;
+}
+
+[data-theme='dark'] .avatar-img img {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.avatar-img img:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Site data stats */
+.site-data {
+  border-top: 1px solid var(--apple-gray-200) !important;
+  border-bottom: 1px solid var(--apple-gray-200) !important;
+  padding: var(--space-4) 0 !important;
+  margin: var(--space-4) 0 !important;
+}
+
+[data-theme='dark'] .site-data {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.site-data > a .headline {
+  font-size: var(--text-xs) !important;
+  font-weight: 500 !important;
+  color: var(--text-tertiary) !important;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.site-data > a .length-num {
+  font-weight: 700 !important;
+  font-size: var(--text-xl) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Follow button */
+#card-info-btn {
+  background: var(--apple-blue) !important;
+  color: #fff !important;
+  border-radius: 980px !important;
+  padding: var(--space-2) var(--space-6) !important;
+  font-weight: 500 !important;
+  font-size: var(--text-sm) !important;
+  letter-spacing: 0.01em;
+  transition: background var(--duration-fast) var(--ease-apple),
+              transform var(--duration-fast) var(--ease-apple) !important;
+  border: none !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+#card-info-btn:hover {
+  background: var(--apple-blue-hover) !important;
+  transform: scale(1.04) !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3) !important;
+}
+
+/* Widget cards */
+.card-widget .item-headline {
+  font-weight: 600 !important;
+  font-size: var(--text-base) !important;
+  color: var(--text-primary) !important;
+  padding-bottom: var(--space-3) !important;
+  border-bottom: 1px solid var(--apple-gray-200);
+  margin-bottom: var(--space-3) !important;
+}
+
+[data-theme='dark'] .card-widget .item-headline {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.card-widget .item-headline i {
+  color: var(--apple-blue) !important;
+  margin-right: var(--space-2) !important;
+}
+
+/* Announcement card */
+.announcement_content {
+  font-size: var(--text-sm) !important;
+  color: var(--text-secondary) !important;
+  line-height: var(--leading-relaxed) !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. FOOTER - Minimal, clean
+   -------------------------------------------------------------------------- */
+
+#footer {
+  background: var(--surface-secondary) !important;
+  border-top: 1px solid var(--apple-gray-200);
+  padding: var(--space-8) 0 !important;
+}
+
+[data-theme='dark'] #footer {
+  background: var(--surface-secondary) !important;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+#footer-wrap {
+  font-size: var(--text-xs) !important;
+  color: var(--text-tertiary) !important;
+}
+
+#footer-wrap a {
+  color: var(--text-secondary) !important;
+  transition: color var(--duration-fast) var(--ease-apple) !important;
+}
+
+#footer-wrap a:hover {
+  color: var(--apple-blue) !important;
+}
+
+/* Heartbeat icon */
+#heartbeat {
+  color: var(--apple-red) !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. RIGHT SIDE BUTTONS - Refined
+   -------------------------------------------------------------------------- */
+
+#rightside > div > button {
+  background: var(--glass-bg) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  border: 0.5px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-secondary) !important;
+  transition: all var(--duration-fast) var(--ease-apple) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+#rightside > div > button:hover {
+  background: var(--surface-tertiary) !important;
+  color: var(--apple-blue) !important;
+  transform: scale(1.08);
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. LINKS - Apple-style
+   -------------------------------------------------------------------------- */
+
+a {
+  color: var(--apple-blue) !important;
+  transition: opacity var(--duration-fast) var(--ease-apple) !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+/* Preserve non-link colors */
+.article-title,
+.site-name,
+.site-data > a .headline,
+.site-data > a .length-num,
+#nav a,
+#nav .site-name,
+.aside-list-item .title,
+.card-archive-list-link,
+.article-sort-item-title {
+  color: var(--text-primary) !important;
+}
+
+.article-title:hover,
+.aside-list-item .title:hover,
+.card-archive-list-link:hover,
+.article-sort-item-title:hover {
+  color: var(--apple-blue) !important;
+  opacity: 1 !important;
+}
+
+/* Link underline animation - Apple blue */
+.link-underline::after {
+  background: var(--apple-blue) !important;
+  height: 1.5px !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. SCROLLBAR - Minimal
+   -------------------------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--apple-gray-300);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--apple-gray-400);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   13. SELECTION - Apple blue
+   -------------------------------------------------------------------------- */
+
+::selection {
+  background: rgba(0, 113, 227, 0.2);
+  color: inherit;
+}
+
+[data-theme='dark'] ::selection {
+  background: rgba(41, 151, 255, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   14. SCROLL REVEAL ANIMATIONS - Smooth, Apple-style
+   -------------------------------------------------------------------------- */
+
+.apple-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s var(--ease-apple),
+              transform 0.8s var(--ease-apple);
+}
+
+.apple-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.apple-reveal-scale {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.8s var(--ease-apple),
+              transform 0.8s var(--ease-apple);
+}
+
+.apple-reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Staggered children reveal */
+.apple-stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s var(--ease-apple),
+              transform 0.6s var(--ease-apple);
+}
+
+.apple-stagger.revealed > *:nth-child(1) { transition-delay: 0s; }
+.apple-stagger.revealed > *:nth-child(2) { transition-delay: 0.08s; }
+.apple-stagger.revealed > *:nth-child(3) { transition-delay: 0.16s; }
+.apple-stagger.revealed > *:nth-child(4) { transition-delay: 0.24s; }
+.apple-stagger.revealed > *:nth-child(5) { transition-delay: 0.32s; }
+.apple-stagger.revealed > *:nth-child(6) { transition-delay: 0.4s; }
+
+.apple-stagger.revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   15. SMOOTH SCROLL
+   -------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth !important;
+}
+
+/* --------------------------------------------------------------------------
+   16. ARTICLE CONTAINER STYLING (for post pages)
+   -------------------------------------------------------------------------- */
+
+#article-container {
+  font-size: var(--text-base) !important;
+  line-height: var(--leading-relaxed) !important;
+  color: var(--text-primary) !important;
+}
+
+#article-container h1 {
+  font-size: var(--text-3xl) !important;
+  font-weight: 800 !important;
+  margin-top: var(--space-12) !important;
+  margin-bottom: var(--space-6) !important;
+}
+
+#article-container h2 {
+  font-size: var(--text-2xl) !important;
+  font-weight: 700 !important;
+  margin-top: var(--space-10) !important;
+  margin-bottom: var(--space-4) !important;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--apple-gray-200);
+}
+
+[data-theme='dark'] #article-container h2 {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+#article-container h3 {
+  font-size: var(--text-xl) !important;
+  font-weight: 600 !important;
+  margin-top: var(--space-8) !important;
+  margin-bottom: var(--space-3) !important;
+}
+
+#article-container p {
+  margin-bottom: var(--space-4) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Code blocks - Apple-style */
+#article-container figure.highlight,
+#article-container pre {
+  border-radius: var(--radius-md) !important;
+  border: 0.5px solid var(--apple-gray-200) !important;
+  overflow: hidden;
+}
+
+[data-theme='dark'] #article-container figure.highlight,
+[data-theme='dark'] #article-container pre {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Inline code */
+#article-container code {
+  background: var(--apple-blue-light) !important;
+  color: var(--apple-blue) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.9em !important;
+}
+
+/* Blockquote */
+#article-container blockquote {
+  border-left: 3px solid var(--apple-blue) !important;
+  background: var(--apple-blue-light) !important;
+  padding: var(--space-4) var(--space-6) !important;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+  margin: var(--space-6) 0 !important;
+  color: var(--text-secondary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   17. PAGINATION
+   -------------------------------------------------------------------------- */
+
+#pagination .page-number {
+  border-radius: var(--radius-sm) !important;
+  font-weight: 500 !important;
+  transition: all var(--duration-fast) var(--ease-apple) !important;
+}
+
+#pagination .page-number.current {
+  background: var(--apple-blue) !important;
+  color: #fff !important;
+}
+
+/* --------------------------------------------------------------------------
+   18. RESPONSIVE REFINEMENTS
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  #site-title {
+    font-size: var(--text-3xl) !important;
+  }
+
+  #site-subtitle {
+    font-size: var(--text-base) !important;
+  }
+
+  /* Disable hover transforms on mobile */
+  .card-animated:hover,
+  #recent-posts > .recent-post-item:hover,
+  #aside-content .card-widget:hover {
+    transform: none !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  #site-title {
+    font-size: var(--text-4xl) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   19. PAGE TRANSITION
+   -------------------------------------------------------------------------- */
+
+body {
+  opacity: 0;
+  animation: applePageFadeIn 0.6s var(--ease-apple) forwards;
+}
+
+@keyframes applePageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   20. SIDEBAR MOBILE - Glassmorphism
+   -------------------------------------------------------------------------- */
+
+#sidebar {
+  background: var(--glass-bg) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+}
+
+#menu-mask {
+  background: rgba(0, 0, 0, 0.3) !important;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* --------------------------------------------------------------------------
+   21. FOCUS STYLES - Accessible
+   -------------------------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--apple-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   22. HR - Subtle divider
+   -------------------------------------------------------------------------- */
+
+hr {
+  border: none !important;
+  height: 0.5px !important;
+  background: var(--apple-gray-200) !important;
+  margin: var(--space-8) 0 !important;
+}
+
+[data-theme='dark'] hr {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* --------------------------------------------------------------------------
+   23. SEARCH - Refined
+   -------------------------------------------------------------------------- */
+
+#local-search .search-dialog {
+  border-radius: var(--radius-xl) !important;
+  background: var(--glass-bg) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+  backdrop-filter: saturate(180%) blur(30px);
+  box-shadow: var(--shadow-xl) !important;
+  border: 0.5px solid var(--glass-border);
+}
+
+/* --------------------------------------------------------------------------
+   24. POST PAGE - Refined typography
+   -------------------------------------------------------------------------- */
+
+#post .post-title {
+  font-weight: 800 !important;
+  font-size: var(--text-4xl) !important;
+  letter-spacing: -0.03em !important;
+  line-height: var(--leading-tight) !important;
+}
+
+#post-info .post-meta-date,
+#post-info .post-meta-categories {
+  color: var(--text-tertiary) !important;
+  font-size: var(--text-sm) !important;
+}
+
+/* TOC - Table of contents */
+.toc-link {
+  font-size: var(--text-sm) !important;
+  color: var(--text-secondary) !important;
+  transition: color var(--duration-fast) var(--ease-apple) !important;
+  border-left: 2px solid transparent;
+  padding-left: var(--space-3) !important;
+}
+
+.toc-link:hover,
+.toc-link.active {
+  color: var(--apple-blue) !important;
+  border-left-color: var(--apple-blue);
+}
