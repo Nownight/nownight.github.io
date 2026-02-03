@@ -19,22 +19,16 @@ const skills = [
 
 const projects = [
   {
-    name: '成交量分析器',
-    description: '股票成交量与收益关系分析工具',
-    tech: ['React', 'Chart.js', 'CSV Parse'],
-    link: '/tools/volume-analyzer',
-  },
-  {
-    name: 'AI 命理决策系统',
-    description: '基于八字算法的智能决策辅助系统',
-    tech: ['React', 'DeepSeek API', 'Tailwind'],
-    link: '/tools/ai-divination',
-  },
-  {
     name: 'JSON 格式化工具',
     description: '在线 JSON 格式化、验证和美化工具',
-    tech: ['React', 'Monaco Editor'],
-    link: '/tools/json-formatter',
+    tech: ['React', 'TypeScript', 'Tailwind'],
+    link: '/tools/json-formatter/',
+  },
+  {
+    name: '博客平台重构',
+    description: '使用 Next.js 14 + React 18 全面重构的现代化博客',
+    tech: ['Next.js', 'React', 'TypeScript'],
+    link: '/blog/',
   },
 ]
 
