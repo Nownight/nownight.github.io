@@ -30,22 +30,16 @@ const features = [
 
 const tools = [
   {
-    title: '📊 成交量分析器',
-    description: '分析股票/指数成交量与未来收益的关系，帮助发现交易信号',
-    href: '/tools/volume-analyzer',
-    tag: '量化分析'
-  },
-  {
-    title: '🧭 AI 命理决策系统',
-    description: '基于八字算法与现代行为科学的精准校正，提供个性化决策建议',
-    href: '/tools/ai-divination',
-    tag: 'AI 应用'
-  },
-  {
     title: '🎨 JSON 格式化工具',
-    description: '在线格式化、验证和美化 JSON 数据，支持语法高亮',
+    description: '在线格式化、验证和美化 JSON 数据，支持语法高亮、压缩和下载',
     href: '/tools/json-formatter',
     tag: '开发工具'
+  },
+  {
+    title: '🛠️ 更多工具',
+    description: '成交量分析、AI 命理决策等工具正在迁移中，敬请期待',
+    href: '/tools',
+    tag: '即将推出'
   }
 ]
 
@@ -134,7 +128,7 @@ export default function Home() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {tools.map((tool, index) => (
               <Link key={index} href={tool.href}>
                 <Card className="h-full card-hover hover:border-primary/50">

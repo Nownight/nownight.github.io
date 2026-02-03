@@ -9,10 +9,8 @@ const footerLinks = {
     { name: '关于', href: '/about' },
   ],
   tools: [
-    { name: '成交量分析器', href: '/tools/volume-analyzer' },
-    { name: 'AI 命理系统', href: '/tools/ai-divination' },
     { name: 'JSON 格式化', href: '/tools/json-formatter' },
-    { name: '正则测试', href: '/tools/regex-tester' },
+    { name: '工具集', href: '/tools' },
   ],
   connect: [
     { name: 'GitHub', href: 'https://github.com/Nownight', icon: Github },
