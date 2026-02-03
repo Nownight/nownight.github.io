@@ -8,7 +8,7 @@ export default function AiDivinationPage() {
     <div className="min-h-screen">
       <iframe
         title="AI 命理决策系统"
-        src="/tools/ai-divination-app/index.html"
+        src="/ai-divination-app/index.html"
         className="h-screen w-full border-0"
       />
     </div>
