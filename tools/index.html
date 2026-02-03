@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛠️ 在线工具集 - Ori_Peng的小菜园</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+            border-radius: 2px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #a78bfa;
+            transform: translateX(-5px);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+            border-color: rgba(96, 165, 250, 0.7);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .tool-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .tool-tag {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">← 返回首页</a>
+
+    <header>
+        <h1>🛠️ 在线工具集</h1>
+        <p>实用的网页工具，开箱即用</p>
+    </header>
+
+    <div class="tools-grid">
+        <a href="volume-analyzer.html" class="tool-card">
+            <span class="tool-icon">📊</span>
+            <h2 class="tool-title">标准成交量分析器</h2>
+            <p class="tool-desc">
+                分析股票/指数成交量与未来收益的关系，帮助发现交易信号。
+                支持上传CSV数据，可视化分析结果，寻找最佳买入时机。
+            </p>
+            <span class="tool-tag">量化分析</span>
+        </a>
+
+        <!-- 更多工具可以在这里添加 -->
+        <div class="tool-card" style="opacity: 0.5; cursor: not-allowed;">
+            <span class="tool-icon">🔜</span>
+            <h2 class="tool-title">更多工具开发中...</h2>
+            <p class="tool-desc">
+                更多实用工具正在开发中，敬请期待！
+            </p>
+            <span class="tool-tag">即将推出</span>
+        </div>
+    </div>
+
+    <footer>
+        <p>💡 这些工具完全在浏览器中运行，不会上传您的任何数据</p>
+        <p style="margin-top: 0.5rem;">© 2023 Ori_Peng的小菜园</p>
+    </footer>
+</body>
+</html>
