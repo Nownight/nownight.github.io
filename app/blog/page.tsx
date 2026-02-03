@@ -161,7 +161,7 @@ export default function BlogPage() {
                   这里记录了我的技术成长历程，分享实用的工具和经验。
                 </p>
                 <Button variant="outline" size="sm" asChild className="w-full">
-                  <Link href="/about">了解更多</Link>
+                  <Link href="/about/">了解更多</Link>
                 </Button>
               </CardContent>
             </Card>

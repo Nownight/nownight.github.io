@@ -10,9 +10,9 @@ import { cn } from '@/lib/utils'
 
 const navigation = [
   { name: '首页', href: '/', icon: Home },
-  { name: '博客', href: '/blog', icon: BookOpen },
-  { name: '工具', href: '/tools', icon: Wrench },
-  { name: '关于', href: '/about', icon: User },
+  { name: '博客', href: '/blog/', icon: BookOpen },
+  { name: '工具', href: '/tools/', icon: Wrench },
+  { name: '关于', href: '/about/', icon: User },
 ]
 
 export function Header() {

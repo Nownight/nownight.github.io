@@ -4,13 +4,13 @@ import { Github, Twitter, Mail, Heart } from 'lucide-react'
 const footerLinks = {
   product: [
     { name: '首页', href: '/' },
-    { name: '博客', href: '/blog' },
-    { name: '工具', href: '/tools' },
-    { name: '关于', href: '/about' },
+    { name: '博客', href: '/blog/' },
+    { name: '工具', href: '/tools/' },
+    { name: '关于', href: '/about/' },
   ],
   tools: [
-    { name: 'JSON 格式化', href: '/tools/json-formatter' },
-    { name: '工具集', href: '/tools' },
+    { name: 'JSON 格式化', href: '/tools/json-formatter/' },
+    { name: '工具集', href: '/tools/' },
   ],
   connect: [
     { name: 'GitHub', href: 'https://github.com/Nownight', icon: Github },
