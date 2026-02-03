@@ -8,7 +8,7 @@ export default function VolumeAnalyzerPage() {
     <div className="min-h-screen">
       <iframe
         title="标准成交量分析器"
-        src="/tools/volume-analyzer/index.html"
+        src="/tools/volume-analyzer-app/index.html"
         className="h-screen w-full border-0"
       />
     </div>
