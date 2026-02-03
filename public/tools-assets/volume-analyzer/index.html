@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 标准成交量分析器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+            border-radius: 2px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .card .desc {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .card h3.blue { color: #60a5fa; }
+        .card h3.purple { color: #a78bfa; }
+        .card h3.pink { color: #f472b6; }
+        .card h3.green { color: #10b981; }
+
+        .file-upload {
+            display: block;
+            padding: 2rem;
+            border: 2px dashed rgba(96, 165, 250, 0.4);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(96, 165, 250, 0.05);
+        }
+
+        .file-upload:hover {
+            border-color: rgba(96, 165, 250, 0.7);
+            background: rgba(96, 165, 250, 0.1);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-upload .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload .text {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .form-hint {
+            display: block;
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn:disabled {
+            background: rgba(71, 85, 105, 0.5);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .data-info {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+        }
+
+        .results {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chart-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            color: #94a3b8;
+            border-bottom: 2px solid rgba(71, 85, 105, 0.5);
+        }
+
+        th:not(:first-child) {
+            text-align: right;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+        }
+
+        td:not(:first-child) {
+            text-align: right;
+        }
+
+        tr {
+            border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+        }
+
+        tr:nth-child(even) {
+            background: rgba(71, 85, 105, 0.1);
+        }
+
+        .positive { color: #10b981; font-weight: 600; }
+        .negative { color: #ef4444; font-weight: 600; }
+        .neutral { color: #94a3b8; }
+        .count { color: #8b5cf6; }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        footer p:last-child {
+            margin-top: 0.5rem;
+            opacity: 0.7;
+            font-family: 'Consolas', monospace;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(71, 85, 105, 0.8);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 116, 139, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📊 标准成交量分析器</h1>
+        <p>分析成交量和未来收益的关系，寻找交易信号</p>
+    </header>
+
+    <div class="controls">
+        <div class="card">
+            <h3 class="blue">第一步：上传数据</h3>
+            <p class="desc">上传包含股票/指数行情的 CSV 文件，文件需要有成交额和收盘价数据</p>
+            <label class="file-upload" id="dropZone">
+                <input type="file" id="fileInput" accept=".csv">
+                <div class="icon">📁</div>
+                <div class="text" id="fileName">点击选择 CSV 文件</div>
+            </label>
+        </div>
+
+        <div class="card">
+            <h3 class="pink">第二步：选择数据列</h3>
+            <p class="desc">告诉系统哪一列是成交额、哪一列是收盘价（通常会自动识别）</p>
+            <div class="form-group">
+                <label class="form-label">成交额在哪一列？</label>
+                <span class="form-hint">一般叫 amount、成交额、vol 等</span>
+                <select id="amountColumn">
+                    <option value="">请先上传文件</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">收盘价在哪一列？</label>
+                <span class="form-hint">一般叫 close、收盘价、收盘 等</span>
+                <select id="closeColumn">
+                    <option value="">请先上传文件</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="purple">第三步：调整计算方式（可选）</h3>
+            <p class="desc">一般保持默认即可，有经验的用户可以自行调整</p>
+            <div class="form-group">
+                <label class="form-label">用多少天的数据计算排名？</label>
+                <span class="form-hint">比如填 40，就是看今天成交量在过去 40 天里排第几</span>
+                <input type="number" id="nDays" value="40" min="1" max="500">
+            </div>
+            <div class="form-group">
+                <label class="form-label">预测未来多少天的收益？</label>
+                <span class="form-hint">比如填 5，就是看今天买入、5天后卖出能赚多少</span>
+                <input type="number" id="futureDays" value="5" min="1" max="100">
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <button class="btn" id="analyzeBtn" disabled>🚀 开始分析</button>
+        <p class="data-info" id="dataInfo"></p>
+    </div>
+
+    <div class="results hidden" id="results">
+        <div class="card chart-container">
+            <h3 class="blue">📈 分析结果：成交量排名 与 未来收益 的关系</h3>
+            <p class="desc">柱子越高表示收益越高，绿色=赚钱，红色=亏钱。看看什么样的成交量水平更容易赚钱！</p>
+            <div class="chart-wrapper">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="card">
+                <h3 class="purple">📊 每个成交量水平有多少天的数据</h3>
+                <p class="desc">样本越多，结果越可靠</p>
+                <div class="chart-wrapper">
+                    <canvas id="countChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="pink">📉 收益趋势线</h3>
+                <p class="desc">可以更直观地看出趋势</p>
+                <div class="chart-wrapper">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="green">📋 详细数据表</h3>
+            <p class="desc">
+                <strong>成交量排名</strong>：-1 表示成交量很低，+1 表示成交量很高，0 表示中等<br>
+                <strong>平均收益</strong>：正数表示平均赚钱，负数表示平均亏钱
+            </p>
+            <div class="table-container">
+                <table id="resultTable">
+                    <thead>
+                        <tr>
+                            <th>成交量排名<br><small style="font-weight:normal;color:#64748b">(-1低 ~ +1高)</small></th>
+                            <th>平均收益<br><small style="font-weight:normal;color:#64748b">(正=赚, 负=亏)</small></th>
+                            <th>样本天数<br><small style="font-weight:normal;color:#64748b">(越多越可靠)</small></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>💡 使用建议：找到绿色柱子最高的成交量区间，当成交量处于该区间时考虑买入</p>
+        <p>计算公式: 成交量排名 = 2 × (当前排名 - N - 1) / N + 1</p>
+    </footer>
+
+    <script>
+        let rawData = null;
+        let mainChart = null;
+        let countChart = null;
+        let trendChart = null;
+
+        const fileInput = document.getElementById('fileInput');
+        const fileNameEl = document.getElementById('fileName');
+        const nDaysInput = document.getElementById('nDays');
+        const futureDaysInput = document.getElementById('futureDays');
+        const amountColumnSelect = document.getElementById('amountColumn');
+        const closeColumnSelect = document.getElementById('closeColumn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const dataInfoEl = document.getElementById('dataInfo');
+        const resultsEl = document.getElementById('results');
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            fileNameEl.textContent = '正在读取: ' + file.name;
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '⏳ 加载中...';
+
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    rawData = results.data.filter(row => row && Object.keys(row).length > 0);
+                    const columns = Object.keys(rawData[0] || {});
+
+                    populateSelect(amountColumnSelect, columns);
+                    populateSelect(closeColumnSelect, columns);
+
+                    autoDetectColumns(columns);
+
+                    fileNameEl.textContent = '✅ ' + file.name;
+                    dataInfoEl.textContent = `已读取 ${rawData.length.toLocaleString()} 条数据，可以开始分析了`;
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.textContent = '🚀 开始分析';
+                },
+                error: (err) => {
+                    console.error('解析错误:', err);
+                    fileNameEl.textContent = '❌ 文件读取失败，请重试';
+                    analyzeBtn.textContent = '🚀 开始分析';
+                }
+            });
+        });
+
+        function populateSelect(select, options) {
+            select.innerHTML = options.map(opt =>
+                `<option value="${opt}">${opt}</option>`
+            ).join('');
+        }
+
+        function autoDetectColumns(columns) {
+            const amtCol = columns.find(c =>
+                c.toLowerCase().includes('amount') ||
+                c.toLowerCase().includes('vol') ||
+                c === '成交额' ||
+                c === '成交量'
+            );
+            const closeCol = columns.find(c =>
+                c.toLowerCase().includes('close') ||
+                c === '收盘价' ||
+                c === '收盘'
+            );
+
+            if (amtCol) amountColumnSelect.value = amtCol;
+            if (closeCol) closeColumnSelect.value = closeCol;
+        }
+
+        function calculateRollingRank(data, nDays) {
+            const result = [];
+            for (let i = 0; i < data.length; i++) {
+                if (i < nDays) {
+                    result.push(null);
+                } else {
+                    const window = data.slice(i - nDays, i + 1);
+                    const currentValue = data[i];
+                    const rank = window.filter(v => v <= currentValue).length;
+                    result.push(rank);
+                }
+            }
+            return result;
+        }
+
+        analyzeBtn.addEventListener('click', () => {
+            if (!rawData || rawData.length === 0) return;
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = '⏳ 正在计算...';
+
+            setTimeout(() => {
+                const nDays = parseInt(nDaysInput.value) || 40;
+                const futureDays = parseInt(futureDaysInput.value) || 5;
+                const amountCol = amountColumnSelect.value;
+                const closeCol = closeColumnSelect.value;
+
+                const amounts = rawData.map(row => parseFloat(row[amountCol]) || 0);
+                const closes = rawData.map(row => parseFloat(row[closeCol]) || 0);
+
+                const ranks = calculateRollingRank(amounts, nDays);
+
+                const processedData = rawData.map((row, i) => {
+                    const rank = ranks[i];
+                    const standardRank = rank !== null ?
+                        Math.round((2 * (rank - nDays - 1) / nDays + 1) * 100) / 100 : null;
+                    const futureClose = i + futureDays < closes.length ? closes[i + futureDays] : null;
+                    const futureReturn = futureClose && closes[i] ?
+                        (futureClose / closes[i] - 1) * 100 : null;
+
+                    return { standardRank, futureReturn };
+                }).filter(row => row.standardRank !== null && row.futureReturn !== null);
+
+                const grouped = {};
+                processedData.forEach(row => {
+                    const key = row.standardRank;
+                    if (!grouped[key]) {
+                        grouped[key] = { sum: 0, count: 0 };
+                    }
+                    grouped[key].sum += row.futureReturn;
+                    grouped[key].count += 1;
+                });
+
+                const analysisResult = Object.entries(grouped)
+                    .map(([key, val]) => ({
+                        standardRank: parseFloat(key),
+                        avgReturn: Math.round((val.sum / val.count) * 1000) / 1000,
+                        count: val.count
+                    }))
+                    .sort((a, b) => a.standardRank - b.standardRank);
+
+                renderResults(analysisResult, futureDays);
+
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = '🚀 重新分析';
+            }, 50);
+        });
+
+        function renderResults(data) {
+            resultsEl.classList.remove('hidden');
+
+            const labels = data.map(d => d.standardRank);
+            const returns = data.map(d => d.avgReturn);
+            const counts = data.map(d => d.count);
+            const colors = returns.map(v => v > 0 ? '#10b981' : v < 0 ? '#ef4444' : '#6b7280');
+
+            if (mainChart) mainChart.destroy();
+            if (countChart) countChart.destroy();
+            if (trendChart) trendChart.destroy();
+
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(71, 85, 105, 0.3)' },
+                        ticks: { color: '#94a3b8', maxTicksLimit: 20 }
+                    },
+                    y: {
+                        grid: { color: 'rgba(71, 85, 105, 0.3)' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            };
+
+            mainChart = new Chart(document.getElementById('mainChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: returns,
+                        backgroundColor: colors,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        ...chartOptions.scales,
+                        x: {
+                            ...chartOptions.scales.x,
+                            title: { display: true, text: '成交量排名（-1=很低, 0=中等, +1=很高）', color: '#94a3b8' }
+                        },
+                        y: {
+                            ...chartOptions.scales.y,
+                            title: { display: true, text: '平均收益 %（正=赚钱, 负=亏钱）', color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+
+            countChart = new Chart(document.getElementById('countChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: counts,
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 4
+                    }]
+                },
+                options: chartOptions
+            });
+
+            trendChart = new Chart(document.getElementById('trendChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: returns,
+                        borderColor: '#f472b6',
+                        backgroundColor: 'rgba(244, 114, 182, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#f472b6',
+                        pointRadius: 4,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: chartOptions
+            });
+
+            const tbody = document.querySelector('#resultTable tbody');
+            tbody.innerHTML = data.map(row => {
+                const returnClass = row.avgReturn > 0 ? 'positive' : row.avgReturn < 0 ? 'negative' : 'neutral';
+                const sign = row.avgReturn > 0 ? '+' : '';
+                return `
+                    <tr>
+                        <td>${row.standardRank}</td>
+                        <td class="${returnClass}">${sign}${row.avgReturn}%</td>
+                        <td class="count">${row.count.toLocaleString()} 天</td>
+                    </tr>
+                `;
+            }).join('');
+
+            resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
