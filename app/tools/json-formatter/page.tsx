@@ -96,7 +96,7 @@ export default function JsonFormatter() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/tools" className="text-sm text-primary hover:underline mb-4 inline-block">
+          <Link href="/tools/" className="text-sm text-primary hover:underline mb-4 inline-block">
             ← 返回工具集
           </Link>
           <h1 className="text-4xl font-bold mb-4">🎨 JSON 格式化工具</h1>

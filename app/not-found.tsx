@@ -22,7 +22,7 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="gap-2">
-            <Link href="/blog">
+            <Link href="/blog/">
               <ArrowLeft className="w-5 h-5" />
               查看博客
             </Link>
@@ -32,11 +32,11 @@ export default function NotFound() {
         <div className="pt-8">
           <p className="text-sm text-muted-foreground">
             或者尝试访问：
-            <Link href="/tools" className="text-primary hover:underline ml-2">
+            <Link href="/tools/" className="text-primary hover:underline ml-2">
               工具集
             </Link>
             {' · '}
-            <Link href="/about" className="text-primary hover:underline">
+            <Link href="/about/" className="text-primary hover:underline">
               关于
             </Link>
           </p>

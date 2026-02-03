@@ -47,7 +47,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       <article className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
         {/* Back Button */}
         <Button variant="ghost" size="sm" asChild className="mb-8 gap-2">
-          <Link href="/blog">
+          <Link href="/blog/">
             <ArrowLeft className="w-4 h-4" />
             返回博客
           </Link>
@@ -117,7 +117,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" asChild>
-                <Link href="/blog">← 返回列表</Link>
+                <Link href="/blog/">← 返回列表</Link>
               </Button>
             </div>
           </div>

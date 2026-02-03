@@ -66,13 +66,13 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button size="lg" asChild className="gap-2 group">
-                <Link href="/blog">
+                <Link href="/blog/">
                   开始阅读
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/tools">探索工具</Link>
+                <Link href="/tools/">探索工具</Link>
               </Button>
             </div>
           </div>
@@ -121,7 +121,7 @@ export default function Home() {
               <p className="text-muted-foreground">实用、高效、开箱即用</p>
             </div>
             <Button variant="ghost" asChild className="hidden sm:flex gap-2">
-              <Link href="/tools">
+              <Link href="/tools/">
                 查看全部
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -148,7 +148,7 @@ export default function Home() {
 
           <div className="mt-8 text-center sm:hidden">
             <Button variant="ghost" asChild className="gap-2">
-              <Link href="/tools">
+              <Link href="/tools/">
                 查看全部工具
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -167,7 +167,7 @@ export default function Home() {
                 <p className="text-muted-foreground">分享技术见解与实践经验</p>
               </div>
               <Button variant="ghost" asChild className="hidden sm:flex gap-2">
-                <Link href="/blog">
+                <Link href="/blog/">
                   查看全部
                   <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -206,7 +206,7 @@ export default function Home() {
 
             <div className="mt-8 text-center sm:hidden">
               <Button variant="ghost" asChild className="gap-2">
-                <Link href="/blog">
+                <Link href="/blog/">
                   查看全部文章
                   <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -227,10 +227,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" asChild>
-              <Link href="/blog">阅读博客</Link>
+              <Link href="/blog/">阅读博客</Link>
             </Button>
             <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white/10" asChild>
-              <Link href="/about">了解更多</Link>
+              <Link href="/about/">了解更多</Link>
             </Button>
           </div>
         </div>
