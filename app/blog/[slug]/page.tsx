@@ -1,19 +1,40 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getAllPosts, getPostBySlug } from '@/lib/blog'
 import { formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Calendar, Clock, Tag, Folder, ArrowLeft } from 'lucide-react'
+import type { BlogPost as BlogPostType } from '@/lib/supabase'
+import ReactMarkdown from 'react-markdown'
 
-export async function generateStaticParams() {
-  const posts = getAllPosts()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
+// 计算阅读时间
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.length / 2
+  return Math.ceil(words / wordsPerMinute) || 1
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug)
+async function getPost(slug: string): Promise<BlogPostType | null> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/blog/${slug}`,
+      { cache: 'no-store' }
+    )
+
+    if (!res.ok) {
+      return null
+    }
+
+    const data = await res.json()
+    return data.post
+  } catch (error) {
+    console.error('Failed to fetch post:', error)
+    return null
+  }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const post = await getPost(slug)
 
   if (!post) {
     return {
@@ -27,20 +48,23 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     authors: [{ name: post.author }],
     openGraph: {
       title: post.title,
-      description: post.description,
+      description: post.description || '',
       type: 'article',
-      publishedTime: post.date,
+      publishedTime: post.created_at,
       authors: [post.author],
     },
   }
 }
 
-export default function BlogPost({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug)
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const post = await getPost(slug)
 
   if (!post) {
     notFound()
   }
+
+  const readingTime = calculateReadingTime(post.content)
 
   return (
     <div className="min-h-screen py-12">
@@ -61,31 +85,35 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              {formatDate(post.date)}
+              {formatDate(post.created_at)}
             </div>
             <div className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
-              {post.readingTime} 分钟阅读
+              {readingTime} 分钟阅读
             </div>
-            <div className="flex items-center gap-1">
-              <Folder className="w-4 h-4" />
-              {post.category}
-            </div>
+            {post.category && (
+              <div className="flex items-center gap-1">
+                <Folder className="w-4 h-4" />
+                {post.category}
+              </div>
+            )}
           </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/blog/tag/${tag}`}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-primary/10 text-sm rounded-full transition-colors"
-              >
-                <Tag className="w-3 h-3" />
-                {tag}
-              </Link>
-            ))}
-          </div>
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/blog/tag/${tag}`}
+                  className="inline-flex items-center gap-1 px-3 py-1 bg-secondary hover:bg-primary/10 text-sm rounded-full transition-colors"
+                >
+                  <Tag className="w-3 h-3" />
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          )}
         </header>
 
         {/* Content */}
@@ -105,7 +133,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
             prose-li:my-1
             animate-fade-in"
         >
-          <div dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} />
+          <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
 
         {/* Footer */}

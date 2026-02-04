@@ -1,70 +1,55 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { BarChart3, Compass, FileJson, Regex, Binary, Hash } from 'lucide-react'
+import { BarChart3, Compass, FileJson, Regex, Binary, Hash, Wrench, LucideIcon } from 'lucide-react'
+import type { Tool } from '@/lib/supabase'
 
 export const metadata = {
   title: '工具集',
   description: '实用的在线工具，开箱即用',
 }
 
-const tools = [
-  {
-    icon: FileJson,
-    title: 'JSON 格式化工具',
-    description: '在线格式化、验证和美化 JSON 数据。支持语法高亮、折叠、复制等功能。',
-    href: '/tools/json-formatter/',
-    tag: '开发工具',
-    color: 'from-green-500 to-emerald-500',
-    available: true,
-  },
-  {
-    icon: BarChart3,
-    title: '成交量分析器',
-    description: '分析股票/指数成交量与未来收益的关系，帮助发现交易信号。正在迁移到 React 版本。',
-    href: '/tools/volume-analyzer/',
-    tag: '量化分析',
-    color: 'from-blue-500 to-cyan-500',
-    available: true,
-  },
-  {
-    icon: Compass,
-    title: 'AI 命理决策系统',
-    description: '基于八字算法与现代行为科学的精准校正，结合AI分析提供个性化决策建议。正在迁移中。',
-    href: '/tools/ai-divination/',
-    tag: 'AI 应用',
-    color: 'from-purple-500 to-pink-500',
-    available: true,
-  },
-  {
-    icon: Regex,
-    title: '正则表达式测试器',
-    description: '在线测试和调试正则表达式。支持多种语言模式，实时匹配结果显示。',
-    href: '/tools/regex-tester',
-    tag: '开发工具',
-    color: 'from-orange-500 to-red-500',
-    available: false,
-  },
-  {
-    icon: Binary,
-    title: 'Base64 编解码',
-    description: '快速进行 Base64 编码和解码。支持文本、文件、图片等多种格式。',
-    href: '/tools/base64',
-    tag: '开发工具',
-    color: 'from-indigo-500 to-blue-500',
-    available: false,
-  },
-  {
-    icon: Hash,
-    title: '哈希生成器',
-    description: '生成各种哈希值（MD5、SHA1、SHA256等）。支持文本和文件哈希计算。',
-    href: '/tools/hash',
-    tag: '开发工具',
-    color: 'from-yellow-500 to-orange-500',
-    available: false,
-  },
+// 图标映射
+const iconMap: Record<string, LucideIcon> = {
+  FileJson,
+  BarChart3,
+  Compass,
+  Regex,
+  Binary,
+  Hash,
+  Wrench, // 默认图标
+}
+
+// 颜色映射（可以根据工具类型或其他属性决定）
+const colorVariants = [
+  'from-green-500 to-emerald-500',
+  'from-blue-500 to-cyan-500',
+  'from-purple-500 to-pink-500',
+  'from-orange-500 to-red-500',
+  'from-indigo-500 to-blue-500',
+  'from-yellow-500 to-orange-500',
 ]
 
-export default function ToolsPage() {
+async function getTools() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/tools`,
+      { cache: 'no-store' }
+    )
+
+    if (!res.ok) {
+      return []
+    }
+
+    const data = await res.json()
+    return data.tools || []
+  } catch (error) {
+    console.error('Failed to fetch tools:', error)
+    return []
+  }
+}
+
+export default async function ToolsPage() {
+  const tools: Tool[] = await getTools()
   return (
     <div className="min-h-screen py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -85,51 +70,60 @@ export default function ToolsPage() {
 
         {/* Tools Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool, index) => {
-            const Icon = tool.icon
-            return (
-              <Link
-                key={tool.title}
-                href={tool.available ? tool.href : '#'}
-                className={!tool.available ? 'pointer-events-none' : ''}
-              >
-                <Card
-                  className={`h-full transition-all duration-300 hover:shadow-xl ${
-                    tool.available
-                      ? 'card-hover hover:border-primary/50 cursor-pointer'
-                      : 'opacity-60'
-                  }`}
-                  style={{
-                    animationDelay: `${index * 100}ms`,
-                  }}
+          {tools.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-muted-foreground">暂无工具</p>
+            </div>
+          ) : (
+            tools.map((tool, index) => {
+              const Icon = iconMap[tool.icon || 'Wrench'] || Wrench
+              const color = colorVariants[index % colorVariants.length]
+              const isAvailable = tool.status === 'available'
+
+              return (
+                <Link
+                  key={tool.id}
+                  href={isAvailable ? `/tools/${tool.slug}` : '#'}
+                  className={!isAvailable ? 'pointer-events-none' : ''}
                 >
-                  <CardHeader>
-                    <div
-                      className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-4 transform group-hover:scale-110 transition-transform`}
-                    >
-                      <Icon className="w-7 h-7 text-white" />
-                    </div>
-                    <CardTitle className="text-xl flex items-center justify-between">
-                      <span>{tool.title}</span>
-                      {!tool.available && (
-                        <span className="text-xs font-normal bg-secondary text-muted-foreground px-2 py-1 rounded">
-                          即将推出
-                        </span>
-                      )}
-                    </CardTitle>
-                    <CardDescription className="text-sm leading-relaxed">
-                      {tool.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <span className={`inline-block px-3 py-1 bg-gradient-to-r ${tool.color} text-white text-xs font-medium rounded-full`}>
-                      {tool.tag}
-                    </span>
-                  </CardContent>
-                </Card>
-              </Link>
-            )
-          })}
+                  <Card
+                    className={`h-full transition-all duration-300 hover:shadow-xl ${
+                      isAvailable
+                        ? 'card-hover hover:border-primary/50 cursor-pointer'
+                        : 'opacity-60'
+                    }`}
+                    style={{
+                      animationDelay: `${index * 100}ms`,
+                    }}
+                  >
+                    <CardHeader>
+                      <div
+                        className={`w-14 h-14 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-4 transform group-hover:scale-110 transition-transform`}
+                      >
+                        <Icon className="w-7 h-7 text-white" />
+                      </div>
+                      <CardTitle className="text-xl flex items-center justify-between">
+                        <span>{tool.title}</span>
+                        {!isAvailable && (
+                          <span className="text-xs font-normal bg-secondary text-muted-foreground px-2 py-1 rounded">
+                            即将推出
+                          </span>
+                        )}
+                      </CardTitle>
+                      <CardDescription className="text-sm leading-relaxed">
+                        {tool.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <span className={`inline-block px-3 py-1 bg-gradient-to-r ${color} text-white text-xs font-medium rounded-full`}>
+                        {tool.tool_type === 'iframe' ? 'Web 应用' : 'React 组件'}
+                      </span>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )
+            })
+          )}
         </div>
 
         {/* CTA */}

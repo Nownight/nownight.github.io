@@ -1,19 +1,48 @@
 import Link from 'next/link'
-import { getAllPosts, getAllTags, getAllCategories } from '@/lib/blog'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { Calendar, Clock, Tag, Folder } from 'lucide-react'
+import type { BlogPost } from '@/lib/supabase'
 
 export const metadata = {
   title: '博客',
   description: '分享技术见解与实践经验',
 }
 
-export default function BlogPage() {
-  const posts = getAllPosts()
-  const tags = getAllTags()
-  const categories = getAllCategories()
+// 计算阅读时间
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.length / 2 // 中文字符数除以2估算词数
+  return Math.ceil(words / wordsPerMinute) || 1
+}
+
+async function getBlogPosts() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/blog`, {
+      cache: 'no-store', // 不缓存，始终获取最新数据
+    })
+
+    if (!res.ok) {
+      return []
+    }
+
+    const data = await res.json()
+    return data.posts || []
+  } catch (error) {
+    console.error('Failed to fetch blog posts:', error)
+    return []
+  }
+}
+
+export default async function BlogPage() {
+  const posts: BlogPost[] = await getBlogPosts()
+
+  // 提取所有标签
+  const tags = Array.from(new Set(posts.flatMap(post => post.tags || [])))
+
+  // 提取所有分类
+  const categories = Array.from(new Set(posts.map(post => post.category).filter(Boolean)))
 
   return (
     <div className="min-h-screen py-12">
@@ -51,16 +80,18 @@ export default function BlogPage() {
                         <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-3">
                           <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            {formatDate(post.date)}
+                            {formatDate(post.created_at)}
                           </div>
                           <div className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
-                            {post.readingTime} 分钟
+                            {calculateReadingTime(post.content)} 分钟
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Folder className="w-4 h-4" />
-                            {post.category}
-                          </div>
+                          {post.category && (
+                            <div className="flex items-center gap-1">
+                              <Folder className="w-4 h-4" />
+                              {post.category}
+                            </div>
+                          )}
                         </div>
 
                         {/* Title & Description */}
@@ -74,17 +105,19 @@ export default function BlogPage() {
 
                       <CardContent>
                         {/* Tags */}
-                        <div className="flex flex-wrap gap-2">
-                          {post.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="inline-flex items-center gap-1 px-3 py-1 bg-secondary text-sm rounded-full hover:bg-primary/10 transition-colors"
-                            >
-                              <Tag className="w-3 h-3" />
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {post.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="inline-flex items-center gap-1 px-3 py-1 bg-secondary text-sm rounded-full hover:bg-primary/10 transition-colors"
+                              >
+                                <Tag className="w-3 h-3" />
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   </Link>
