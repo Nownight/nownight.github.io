@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart3, Compass, FileJson, Regex, Binary, Hash, Wrench, LucideIcon } from 'lucide-react'
-import { createClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import type { Tool } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
@@ -34,7 +34,6 @@ const colorVariants = [
 
 async function getTools() {
   try {
-    const supabase = createClient()
     const { data, error } = await supabase
       .from('tools')
       .select('*')
