@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BarChart3, Compass, FileJson, Regex, Binary, Hash, Wrench, LucideIcon } from 'lucide-react'
 import type { Tool } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: '工具集',
   description: '实用的在线工具，开箱即用',
