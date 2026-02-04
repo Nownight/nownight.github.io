@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:tools": "node scripts/seed-tools.mjs"
   },
   "keywords": [
     "blog",
@@ -32,6 +33,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "framer-motion": "^12.30.0",
     "gray-matter": "^4.0.3",
     "jsonwebtoken": "^9.0.3",
