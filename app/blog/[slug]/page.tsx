@@ -6,6 +6,8 @@ import { Calendar, Clock, Tag, Folder, ArrowLeft } from 'lucide-react'
 import type { BlogPost as BlogPostType } from '@/lib/supabase'
 import ReactMarkdown from 'react-markdown'
 
+export const dynamic = 'force-dynamic'
+
 // 计算阅读时间
 function calculateReadingTime(content: string): number {
   const wordsPerMinute = 200

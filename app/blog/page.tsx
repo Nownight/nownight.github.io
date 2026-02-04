@@ -5,6 +5,8 @@ import { formatDate } from '@/lib/utils'
 import { Calendar, Clock, Tag, Folder } from 'lucide-react'
 import type { BlogPost } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: '博客',
   description: '分享技术见解与实践经验',
