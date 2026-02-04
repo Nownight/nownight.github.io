@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BarChart3, Compass, FileJson, Regex, Binary, Hash, Wrench, LucideIcon } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
 import type { Tool } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
@@ -33,17 +34,18 @@ const colorVariants = [
 
 async function getTools() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/tools`,
-      { cache: 'no-store' }
-    )
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('tools')
+      .select('*')
+      .order('created_at', { ascending: false })
 
-    if (!res.ok) {
+    if (error) {
+      console.error('Failed to fetch tools:', error)
       return []
     }
 
-    const data = await res.json()
-    return data.tools || []
+    return data || []
   } catch (error) {
     console.error('Failed to fetch tools:', error)
     return []
